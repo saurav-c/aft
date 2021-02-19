@@ -3,11 +3,12 @@ package storage
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/golang/protobuf/proto"
 
-	pb "github.com/vsreekanti/aft/proto/aft"
+	pb "github.com/saurav-c/aft/proto/aft"
 )
 
 const (
@@ -89,8 +90,8 @@ func (anna *AnnaStorageManager) Get(key string) (*pb.KeyValuePair, error) {
 	client := anna.getClient()
 	defer anna.releaseClient(client)
 	bts, err := client.Get(key)
-	for err != nil && strings.Contains(err, "KEY_DNE") {
-		bts, err := client.Get(key)
+	for err != nil && strings.Contains(err.Error(), "KEY_DNE") {
+		client.Get(key)
 	}
 
 	if err != nil {

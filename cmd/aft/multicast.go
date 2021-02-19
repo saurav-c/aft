@@ -9,7 +9,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	zmq "github.com/pebbe/zmq4"
 
-	pb "github.com/vsreekanti/aft/proto/aft"
+	pb "github.com/saurav-c/aft/proto/aft"
 )
 
 const (

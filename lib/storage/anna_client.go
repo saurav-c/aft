@@ -10,7 +10,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	zmq "github.com/pebbe/zmq4"
 
-	annapb "github.com/vsreekanti/aft/proto/anna"
+	annapb "github.com/saurav-c/aft/proto/anna"
 )
 
 type AnnaClient struct {

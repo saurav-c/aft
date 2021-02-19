@@ -8,10 +8,10 @@ import (
 
 	uuid "github.com/nu7hatch/gouuid"
 
-	"github.com/vsreekanti/aft/config"
-	"github.com/vsreekanti/aft/lib/consistency"
-	"github.com/vsreekanti/aft/lib/storage"
-	pb "github.com/vsreekanti/aft/proto/aft"
+	"github.com/saurav-c/aft/config"
+	"github.com/saurav-c/aft/lib/consistency"
+	"github.com/saurav-c/aft/lib/storage"
+	pb "github.com/saurav-c/aft/proto/aft"
 )
 
 type AftServer struct {
@@ -60,10 +60,11 @@ func NewAftServer() (*AftServer, *config.AftConfig) {
 		storageManager = storage.NewS3StorageManager("vsreekanti")
 	case "dynamo":
 		storageManager = storage.NewDynamoStorageManager("AftData", "AftData")
-	case "redis":
-		storageManager = storage.NewRedisStorageManager("aft-test.kxmfgs.clustercfg.use1.cache.amazonaws.com:6379", "")
+	//case "redis":
+	//	storageManager = storage.NewRedisStorageManager("aft-test.kxmfgs.clustercfg.use1.cache.amazonaws.com:6379", "")
 	case "anna":
 		storageManager = storage.NewAnnaStorageManager(conf.IpAddress, conf.ElbAddress)
+		fmt.Println("Connected to Anna Storage Manager!")
 	default:
 		log.Fatal(fmt.Sprintf("Unrecognized storageType %s. Valid types are: s3, dynamo, redis.", conf.StorageType))
 		os.Exit(3)
@@ -101,10 +102,10 @@ func NewAftServer() (*AftServer, *config.AftConfig) {
 	}
 
 	// Retrieve the list of committed transactions
-	transactionKeys, _ := storageManager.List("transactions")
-	transactionRecords, err := storageManager.MultiGetTransaction(&transactionKeys)
-	txnList := &pb.TransactionList{Records: *transactionRecords}
-	server.UpdateMetadata(txnList)
+	//transactionKeys, _ := storageManager.List("transactions")
+	//transactionRecords, err := storageManager.MultiGetTransaction(&transactionKeys)
+	//txnList := &pb.TransactionList{Records: *transactionRecords}
+	//server.UpdateMetadata(txnList)
 
 	fmt.Printf("Prepopulation finished: Found %d transactions and %d keys.\n", len(server.FinishedTransactions), len(server.KeyVersionIndex))
 

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"sync"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
-func createSocket(context *zmq.Context, address string) *zmq.Socket {
+func CreateSocket(context *zmq.Context, address string) *zmq.Socket {
 	sckt, err := context.NewSocket(zmq.PUSH)
 	if err != nil {
 		fmt.Println("Unexpected error while creating new socket:\n", err)
@@ -36,15 +38,15 @@ func NewSocketCache(context *zmq.Context) *SocketCache {
 	}
 }
 
-func (socketCache *SocketCache) Get(string address) *zmq.Socket {
+func (socketCache *SocketCache) Get(address string) *zmq.Socket {
 	socketCache.updateMutex.Lock()
 	if socket, ok := socketCache.cache[address]; ok {
 		socketCache.updateMutex.Unlock()
 		return socket
 	}
 
-	socket := createSocket(socketCache.context, address)
-	socketCache[address] = socket
-	socketCache.Unlock()
+	socket := CreateSocket(socketCache.context, address)
+	socketCache.cache[address] = socket
+	socketCache.updateMutex.Unlock()
 	return socket
 }
